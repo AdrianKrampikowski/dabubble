@@ -288,7 +288,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewChecked  {
         this.userIsVerified =
           this.firestoreService.auth.currentUser.emailVerified;
 
-        if (this.userUid === '3a8KbhiqXLe3hbzLiPOn4SwE7ot2') {
+        if (this.userUid === 'vrsCc3CFhJXvECuPDBX8sr7zpj83') {
           this.guestLogIn = true;
         }
       }
