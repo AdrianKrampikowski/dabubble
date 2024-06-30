@@ -62,6 +62,7 @@ export class SignUpChooseAvatarComponent implements OnInit {
       reader.onload = (e) => {
         this.imageSrc = e.target?.result;
         this.iconIndex = 6;
+        this.imageSelected = true;
         const icon = file;
       };
       reader.readAsDataURL(file);
