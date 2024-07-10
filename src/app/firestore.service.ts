@@ -1,13 +1,44 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, sendEmailVerification, updatePassword, sendPasswordResetEmail, signOut, verifyBeforeUpdateEmail, deleteUser,} from '@angular/fire/auth';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+  sendEmailVerification,
+  updatePassword,
+  sendPasswordResetEmail,
+  signOut,
+  verifyBeforeUpdateEmail,
+  deleteUser,
+} from '@angular/fire/auth';
 import { FirebaseApp } from '@angular/fire/app';
-import { getFirestore, doc, setDoc, collection, getDocs, getDoc, updateDoc, where, deleteField, deleteDoc, query,} from '@angular/fire/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject,} from '@angular/fire/storage';
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  collection,
+  getDocs,
+  getDoc,
+  updateDoc,
+  where,
+  deleteField,
+  deleteDoc,
+  query,
+} from '@angular/fire/firestore';
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from '@angular/fire/storage';
 import { User } from '../models/user.class';
 import { Channel } from '../models/channel.class';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable,} from 'rxjs';
-import { Database, ref as reference} from '@angular/fire/database';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Database, ref as reference } from '@angular/fire/database';
 import { IdleService } from './services/idle.service';
 
 @Injectable({
@@ -35,9 +66,14 @@ export class FirestoreService {
   displayWorkspace: boolean = true;
   isScreenWide: boolean = false;
   isScreenWide1300px: boolean = false;
-  threadType:string = '';
+  threadType: string = '';
 
-  constructor( private myFirebaseApp: FirebaseApp, public router: Router, private rdb: Database, private idleService: IdleService) {
+  constructor(
+    private myFirebaseApp: FirebaseApp,
+    public router: Router,
+    private rdb: Database,
+    private idleService: IdleService
+  ) {
     this.auth = getAuth(myFirebaseApp);
     this.auth.languageCode = 'de';
     this.firestore = getFirestore(myFirebaseApp);
@@ -94,8 +130,7 @@ export class FirestoreService {
         return deleteDoc(doc(this.firestore, 'chats', chatDoc.id));
       });
       await Promise.all(deletePromises);
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   async deleteUserIcon(currentUserIcon: string, currentUserId: string) {
@@ -118,8 +153,7 @@ export class FirestoreService {
         await updateDoc(userDocRef, {
           photo: deleteField(),
         });
-      } catch (error: any) {
-      }
+      } catch (error: any) {}
     }
   }
 
@@ -131,8 +165,7 @@ export class FirestoreService {
     try {
       const userDocRef = doc(this.firestore, 'users', uid);
       await updateDoc(userDocRef, { username: name });
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   async updateEmail(newMail: string, uid: string): Promise<string> {
@@ -173,8 +206,7 @@ export class FirestoreService {
       } else {
         return null;
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   async sendVerificationEmail(user: any): Promise<void> {
@@ -185,8 +217,7 @@ export class FirestoreService {
           'Bitte verifizieren Sie Ihre neue E-Mail-Adresse. Überprüfen Sie Ihren Posteingang und klicken Sie auf den Verifizierungslink.'
         );
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   currentAuth() {
@@ -225,17 +256,15 @@ export class FirestoreService {
         uid: this.currentuid,
         activeStatus: 'offline',
       });
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   async logOutAfterDeleteAccount() {
     await this.clearMessagesSubject.next(true);
-    signOut(this.auth)
-      .then(() => {
-        this.router.navigate(['']);
-        location.reload();
-      })
+    signOut(this.auth).then(() => {
+      this.router.navigate(['']);
+      location.reload();
+    });
   }
 
   async getUserData(uid: any): Promise<any | null> {
@@ -293,8 +322,7 @@ export class FirestoreService {
       await updateDoc(userRef, {
         photo: userIconTokenURL,
       });
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   async downloadUserIcon(uid: any) {
@@ -306,8 +334,7 @@ export class FirestoreService {
         const userData = docSnap.data();
         return userData['photo'];
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   async uploadUserIconIntoStorage(userId: any, file: any) {
@@ -497,8 +524,7 @@ export class FirestoreService {
   async sendEmailAfterSignUp(user: any): Promise<void> {
     try {
       await sendEmailVerification(user);
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   async sendEmailResetPasswort(emailData: {
@@ -514,8 +540,7 @@ export class FirestoreService {
       };
 
       await sendPasswordResetEmail(auth, email, actionCodeSettings);
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   async changePassword(userId: any, newPassword: string): Promise<void> {
